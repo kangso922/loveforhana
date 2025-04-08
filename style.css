@@ -142,52 +142,6 @@ button:hover {
         opacity: 0.5;
     }
 }
-.header-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    margin-bottom: 2rem;
-}
-
-/* 오른쪽 상단에 음악 버튼 */
-.music-button-wrapper {
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translateY(-50%);
-}
-
-.music-button {
-    background-color: #ffe4ec;
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s ease;
-}
-
-.music-button:hover {
-    background-color: #ffd6e8;
-}
-
-/* 반응형 대응 - 모바일에서 버튼이 제목과 겹치지 않도록 */
-@media (max-width: 480px) {
-    .music-button-wrapper {
-        top: 6px;
-        right: 10px;
-        transform: none;
-    }
-    
-}
-
-
 
 
 .player {
