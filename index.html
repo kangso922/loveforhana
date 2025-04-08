@@ -10,7 +10,7 @@
 <body>
 <div class="player">
     <audio id="player" src="music/bgm.mp3"></audio>
-    <button onclick="togglePlay()" id="playPauseBtn" class="play">Play</button>
+    <button onclick="togglePlay()" id="playPauseBtn" class="play">♫</button>
     <div id="bar" class="bar"></div>
 </div>
 <div class="container">
@@ -221,11 +221,11 @@
     function togglePlay() {
         if (audio.paused) {
             audio.play();
-            playPauseBtn.textContent = "Pause";
+            playPauseBtn.textContent = "🔇";
             bar.style.display = "block";
         } else {
             audio.pause();
-            playPauseBtn.textContent = "Play";
+            playPauseBtn.textContent = "♫";
             bar.style.display = "none";
         }
     }
