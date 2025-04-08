@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>우리 둘만의 그림 갤러리 🎨</title>
+    <title>하나의 그림 갤러리 🎨</title>
     <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet" />
 </head>
 <body>
 <div class="container">
@@ -19,13 +20,22 @@
         <div class="item"><img src="images/image7.jpg" alt="그림 7" /></div>
         <div class="item"><img src="images/image8.jpg" alt="그림 8" /></div>
     </div>
+
+    <div class="music-control">
+        <button onclick="document.getElementById('bgm').play()">🎵 음악 듣기</button>
+    </div>
 </div>
 
-<!-- 확대 보기 모달 -->
+<!-- 모달 -->
 <div class="modal" id="modal">
     <span class="close" id="close">×</span>
     <img class="modal-content" id="modal-img" />
 </div>
+
+<audio id="bgm" loop>
+    <source src="music/bgm.mp3" type="audio/mpeg" />
+    브라우저가 오디오를 지원하지 않습니다.
+</audio>
 
 <script>
     const modal = document.getElementById('modal');
