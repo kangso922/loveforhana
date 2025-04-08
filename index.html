@@ -8,11 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet"/>
 </head>
 <body>
+<div class="player">
+    <audio id="player" src="music/bgm.mp3"></audio>
+    <button onclick="togglePlay()" id="playPauseBtn" class="play">Play</button>
+    <div id="bar" class="bar"></div>
+</div>
 <div class="container">
     <div class="header-wrapper">
-        <div class="music-button-wrapper">
+        <!--<div class="music-button-wrapper">
             <button id="music-icon" class="music-button" onclick="document.getElementById('bgm').play()">🎵</button>
-        </div>
+        </div>-->
         <h1>하나떵개의 그림들 ✨</h1>
     </div>
 
@@ -49,9 +54,9 @@
     const modalImg = document.getElementById('modal-img');
     const closeBtn = document.getElementById('close');
 
-    document.getElementById('music-icon').addEventListener('click', () => {
+    /*document.getElementById('music-icon').addEventListener('click', () => {
         document.getElementById('bgm').play();
-    });
+    });*/
 
     let scrollY = 0;
 
@@ -208,6 +213,22 @@
 
     // 일정 간격으로 계속 생성
     setInterval(createPetal, 500);
+
+    const audio = document.getElementById("player");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const bar = document.getElementById("bar");
+
+    function togglePlay() {
+        if (audio.paused) {
+            audio.play();
+            playPauseBtn.textContent = "Pause";
+            bar.style.display = "block";
+        } else {
+            audio.pause();
+            playPauseBtn.textContent = "Play";
+            bar.style.display = "none";
+        }
+    }
 
 </script>
 </body>
