@@ -11,7 +11,7 @@
 <div class="container">
     <div class="header-wrapper">
         <div class="music-button-wrapper">
-            <button class="music-button" onclick="document.getElementById('bgm').play()">🎵</button>
+            <button id="music-icon" class="music-button" onclick="document.getElementById('bgm').play()">🎵</button>
         </div>
         <h1>하나떵개의 그림들 ✨</h1>
     </div>
@@ -117,8 +117,8 @@
                     wrapper.style.position = "absolute";
                     wrapper.style.left = `${posX}px`;
                     wrapper.style.top = `${posY}px`;
-                    wrapper.style.width = "30px";
-                    wrapper.style.height = "30px";
+                    wrapper.style.width = "32px";
+                    wrapper.style.height = "32px";
                     wrapper.innerHTML = cleanedSvg;
 
                     document.body.appendChild(wrapper);
