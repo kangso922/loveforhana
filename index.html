@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>하나의 그림 갤러리 🎨</title>
-    <link rel="stylesheet" href="style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet"/>
 </head>
 <body>
 <div class="container">
     <h1>하나떵개의 그림들 ✨</h1>
-    <p class="quote" id="quote">하나는 바보야</p>
     <div class="gallery">
-        <div class="item"><img src="images/image1.jpg" alt="그림 1" /></div>
-        <div class="item"><img src="images/image2.jpg" alt="그림 2" /></div>
-        <div class="item"><img src="images/image3.jpg" alt="그림 3" /></div>
-        <div class="item"><img src="images/image4.jpg" alt="그림 4" /></div>
-        <div class="item"><img src="images/image5.jpg" alt="그림 5" /></div>
-        <div class="item"><img src="images/image6.jpg" alt="그림 6" /></div>
-        <div class="item"><img src="images/image7.jpg" alt="그림 7" /></div>
-        <div class="item"><img src="images/image8.jpg" alt="그림 8" /></div>
+        <div class="item"><img src="images/image1.jpg" alt="그림 1"/></div>
+        <div class="item"><img src="images/image2.jpg" alt="그림 2"/></div>
+        <div class="item"><img src="images/image3.jpg" alt="그림 3"/></div>
+        <div class="item"><img src="images/image4.jpg" alt="그림 4"/></div>
+        <div class="item"><img src="images/image5.jpg" alt="그림 5"/></div>
+        <div class="item"><img src="images/image6.jpg" alt="그림 6"/></div>
+        <div class="item"><img src="images/image7.jpg" alt="그림 7"/></div>
+        <div class="item"><img src="images/image8.jpg" alt="그림 8"/></div>
     </div>
 
     <div class="music-control">
@@ -30,12 +29,11 @@
 <!-- 모달 -->
 <div class="modal" id="modal">
     <span class="close" id="close">×</span>
-    <img class="modal-content" id="modal-img" />
-    <div class="heart" id="heart">❤️️️❤️️️❤️️️❤️️️❤️️️</div>
+    <img class="modal-content" id="modal-img"/>
 </div>
 
 <audio id="bgm" loop>
-    <source src="music/bgm.mp3" type="audio/mpeg" />
+    <source src="music/bgm.mp3" type="audio/mpeg"/>
     브라우저가 오디오를 지원하지 않습니다.
 </audio>
 
@@ -43,26 +41,117 @@
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modal-img');
     const closeBtn = document.getElementById('close');
-    const heart = document.getElementById('heart');
-    const quotes = [
-        "하나는 바보야.",
-        "트위터에 왜 안 올려!",
-        "하나가 그린 원쏘, 내가 좋아하는 캐릭터."
-    ];
-    document.getElementById('quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
 
     document.querySelectorAll('.item img').forEach(img => {
         img.addEventListener('click', () => {
-            modal.style.display = 'flex';
+            // 먼저 모달을 띄움
             modalImg.src = img.src;
-            heart.classList.add('show');
-            setTimeout(() => heart.classList.remove('show'), 800);
+            modal.style.display = 'flex';
+
+            // 렌더링이 완료된 후 실행되어야 하므로 setTimeout 사용
+            setTimeout(() => {
+                const rect = modalImg.getBoundingClientRect();
+                const scrollX = window.scrollX;
+                const scrollY = window.scrollY;
+
+                const imageX = rect.left + scrollX;
+                const imageY = rect.top + scrollY;
+                const imageWidth = rect.width;
+                const imageHeight = rect.height;
+
+                createHeartsFromBox(imageX, imageY, imageWidth, imageHeight);
+                createParticlesFromBox(imageX, imageY, imageWidth, imageHeight);
+            }, 0); // 다음 이벤트 루프에서 실행 (렌더링 완료 후)
         });
     });
+
+
+
+
 
     closeBtn.addEventListener('click', () => {
         modal.style.display = 'none';
     });
+
+    function createHeartsFromBox(x, y, width, height) {
+        fetch("images/heart-svgrepo-com.svg?cache=" + Date.now())
+            .then(res => res.text())
+            .then(svgText => {
+                // width/height 제거
+                let cleanedSvg = svgText
+                    .replace(/<svg([^>]*)width="[^"]*"([^>]*)>/, '<svg$1$2>')
+                    .replace(/<svg([^>]*)height="[^"]*"([^>]*)>/, '<svg$1$2>');
+
+                // fill/stroke 수정
+                cleanedSvg = cleanedSvg
+                    .replace(/fill="none"/g, 'fill="#ff6b81"')
+                    .replace(/stroke="#[^"]*"/g, 'stroke="none"');
+
+                const centerX = x + width / 2;
+                const centerY = y + height / 2;
+                const maxRadius = Math.min(width, height) * 0.75;
+
+                for (let i = 0; i < 10; i++) {
+                    const angle = Math.random() * 2 * Math.PI;
+                    const radius = Math.random() * maxRadius;
+
+                    const offsetX = Math.cos(angle) * radius;
+                    const offsetY = Math.sin(angle) * radius;
+
+                    const posX = centerX + offsetX;
+                    const posY = centerY + offsetY;
+
+                    const wrapper = document.createElement("div");
+                    wrapper.classList.add("floating-heart");
+                    wrapper.style.position = "absolute";
+                    wrapper.style.left = `${posX}px`;
+                    wrapper.style.top = `${posY}px`;
+                    wrapper.style.width = "30px";
+                    wrapper.style.height = "30px";
+                    wrapper.innerHTML = cleanedSvg;
+
+                    document.body.appendChild(wrapper);
+                    setTimeout(() => wrapper.remove(), 1500);
+                }
+            });
+    }
+
+
+
+
+    function createParticlesFromBox(x, y, width, height) {
+        for (let i = 0; i < 12; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            const angle = Math.random() * 2 * Math.PI;
+            const radius = Math.random() * Math.min(width, height) * 0.75; // 이미지 크기에 비례
+
+            const offsetX = Math.cos(angle) * radius;
+            const offsetY = Math.sin(angle) * radius;
+
+
+            const px = x + width / 2 + offsetX;
+            const py = y + height / 2 + offsetY;
+
+            particle.style.left = `${px}px`;
+            particle.style.top = `${py}px`;
+            particle.style.position = 'absolute';
+
+            const moveAngle = Math.random() * 2 * Math.PI;
+            const dist = Math.random() * 60 + 20;
+
+            particle.style.setProperty('--dest-x', `${Math.cos(angle) * dist}px`);
+            particle.style.setProperty('--dest-y', `${Math.sin(angle) * dist}px`);
+            particle.style.background = ['#ffc1cc', '#ffd6e8', '#ffb3b3', '#ffe4ec'][Math.floor(Math.random() * 4)];
+
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 800);
+        }
+    }
+
+
+
 </script>
 </body>
 </html>

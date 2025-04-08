@@ -17,14 +17,7 @@ h1 {
     text-align: center;
     font-weight: normal;
     font-size: 2.5rem;
-    margin-bottom: 0.8rem;
-}
-
-.quote {
-    text-align: center;
-    font-size: 1.2rem;
-    margin-bottom: 2.5rem;
-    opacity: 0.7;
+    margin-bottom: 2rem;
 }
 
 .gallery {
@@ -36,14 +29,11 @@ h1 {
 .item img {
     width: 100%;
     height: auto;
-    border-radius: 14px;
+    border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /* background-color: #fff; 제거 */
-    /* padding: 6px; 제거 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-
 
 .item img:hover {
     transform: scale(1.05);
@@ -52,14 +42,14 @@ h1 {
 
 .music-control {
     text-align: center;
-    margin-top: 2.5rem;
+    margin-top: 2rem;
 }
 
 button {
     font-family: 'Gamja Flower', cursive;
     font-size: 1.2rem;
     padding: 0.6rem 1.4rem;
-    background-color: #ffd6e8;
+    background-color: #ffe4ec;
     border: none;
     border-radius: 16px;
     cursor: pointer;
@@ -67,7 +57,7 @@ button {
 }
 
 button:hover {
-    background-color: #ffbad6;
+    background-color: #ffd6e8;
 }
 
 /* 모달 */
@@ -79,16 +69,15 @@ button:hover {
     top: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0,0,0,0.85);
     justify-content: center;
     align-items: center;
-    flex-direction: column;
 }
 
 .modal-content {
     max-width: 90%;
     max-height: 90%;
-    border-radius: 12px;
+    border-radius: 10px;
 }
 
 .close {
@@ -100,37 +89,32 @@ button:hover {
     cursor: pointer;
 }
 
-/* 하트 애니메이션 */
-.heart {
-    font-size: 2.5rem;
-    color: #ff92a0;
-    opacity: 0;
-    transform: translateY(0) scale(0.8);
-    transition: none;
-    position: absolute;
-    animation: none;
+.floating-heart {
+    animation: float-heart 1.5s ease-out forwards;
     pointer-events: none;
+    z-index: 999;
+    display: inline-block;
 }
 
-.heart.show {
-    animation: floatUp 1s ease-out forwards;
+@keyframes float-heart {
+    0% { opacity: 0; transform: translateY(10px) scale(0.8); }
+    50% { opacity: 1; transform: translateY(-10px) scale(1); }
+    100% { opacity: 0; transform: translateY(-50px) scale(0.8); }
 }
 
-@keyframes floatUp {
-    0% {
-        opacity: 0;
-        transform: translateY(0) scale(0.8);
-    }
-    30% {
-        opacity: 1;
-        transform: translateY(-20px) scale(1.2);
-    }
-    60% {
-        opacity: 0.9;
-        transform: translateY(-40px) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-60px) scale(0.8);
-    }
+
+.particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: particle-float 0.8s ease-out forwards;
+    pointer-events: none;
+    z-index: 999;
 }
+
+@keyframes particle-float {
+    0% { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--dest-x), var(--dest-y)) scale(0.5); }
+}
+
