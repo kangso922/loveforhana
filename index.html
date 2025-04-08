@@ -9,7 +9,11 @@
 </head>
 <body>
 <div class="container">
-    <h1>하나떵개의 그림들 ✨</h1>
+    <div class="title-bar">
+        <h1>하나떵개의 그림들 ✨</h1>
+        <button id="music-icon" class="music-button" title="음악 듣기">🎵</button>
+    </div>
+
     <div class="gallery">
         <div class="item"><img src="images/image1.jpg" alt="그림 1"/></div>
         <div class="item"><img src="images/image2.jpg" alt="그림 2"/></div>
@@ -21,9 +25,9 @@
         <div class="item"><img src="images/image8.jpg" alt="그림 8"/></div>
     </div>
 
-    <div class="music-control">
+    <!--<div class="music-control">
         <button onclick="document.getElementById('bgm').play()">🎵 음악 듣기</button>
-    </div>
+    </div>-->
 </div>
 
 <!-- 모달 -->
@@ -41,6 +45,10 @@
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modal-img');
     const closeBtn = document.getElementById('close');
+
+    document.getElementById('music-icon').addEventListener('click', () => {
+        document.getElementById('bgm').play();
+    });
 
     document.querySelectorAll('.item img').forEach(img => {
         img.addEventListener('click', () => {
@@ -150,7 +158,30 @@
         }
     }
 
+    function createPetal() {
+        const petal = document.createElement("div");
+        petal.classList.add("petal");
+        petal.innerText = "🌸";
 
+        const startLeft = Math.random() * window.innerWidth;
+        const size = Math.random() * 14 + 12; // 12px ~ 26px
+        const duration = Math.random() * 5 + 5; // 5s ~ 10s
+        const delay = Math.random() * 5;
+        const xDrift = Math.random() * 100 - 50 + "px";
+
+        petal.style.left = `${startLeft}px`;
+        petal.style.fontSize = `${size}px`;
+        petal.style.animationDuration = `${duration}s`;
+        petal.style.animationDelay = `${delay}s`;
+        petal.style.setProperty('--x-drift', xDrift);
+
+        document.body.appendChild(petal);
+
+        setTimeout(() => petal.remove(), (duration + delay) * 1000);
+    }
+
+    // 일정 간격으로 계속 생성
+    setInterval(createPetal, 500);
 
 </script>
 </body>

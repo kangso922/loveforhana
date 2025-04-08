@@ -118,3 +118,56 @@ button:hover {
     100% { opacity: 0; transform: translate(var(--dest-x), var(--dest-y)) scale(0.5); }
 }
 
+
+.petal {
+    position: fixed;
+    top: -50px;
+    font-size: 20px;
+    pointer-events: none;
+    animation: fall linear infinite;
+    z-index: 1;
+    color: #f9c4d2; /* 연핑크 */
+}
+
+@keyframes fall {
+    0% {
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(var(--x-drift)) translateY(100vh) rotate(360deg);
+        opacity: 0.5;
+    }
+}
+
+
+.title-bar {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 0 1rem;
+     margin-bottom: 2rem;
+ }
+
+.music-button {
+    background-color: #ffe4ec;
+    border: none;
+    border-radius: 50%;
+    width: 40px;   /* 정사각형 */
+    height: 40px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;             /* 아이콘 가운데 정렬 */
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+.music-button:hover {
+    transform: scale(1.2);
+    background-color: #ffd6e8;
+}
+
+
