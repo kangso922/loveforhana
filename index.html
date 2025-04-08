@@ -53,13 +53,23 @@
         document.getElementById('bgm').play();
     });
 
+    let scrollY = 0;
+
     document.querySelectorAll('.item img').forEach(img => {
         img.addEventListener('click', () => {
-            // 먼저 모달을 띄움
             modalImg.src = img.src;
+
+            // 현재 스크롤 위치 저장 + body 고정
+            scrollY = window.scrollY;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.left = '0';
+            document.body.style.right = '0';
+            document.body.style.width = '100%';
+
             modal.style.display = 'flex';
 
-            // 렌더링이 완료된 후 실행되어야 하므로 setTimeout 사용
+            // 하트 위치 계산
             setTimeout(() => {
                 const rect = modalImg.getBoundingClientRect();
                 const scrollX = window.scrollX;
@@ -72,13 +82,30 @@
 
                 createHeartsFromBox(imageX, imageY, imageWidth, imageHeight);
                 createParticlesFromBox(imageX, imageY, imageWidth, imageHeight);
-            }, 0); // 다음 이벤트 루프에서 실행 (렌더링 완료 후)
+            }, 0);
         });
     });
 
-    closeBtn.addEventListener('click', () => {
+    // 모달 닫기
+    function closeModal() {
         modal.style.display = 'none';
-    });
+
+        // body 스타일 원상복구 + 스크롤 위치 되돌리기
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, scrollY);
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+
+
+
+    modal.addEventListener('click',closeModal);
+
+
 
     function createHeartsFromBox(x, y, width, height) {
         fetch("images/heart-svgrepo-com.svg?cache=" + Date.now())
