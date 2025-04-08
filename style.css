@@ -150,8 +150,9 @@ button:hover {
 /* 오른쪽 상단에 음악 버튼 */
 .music-button-wrapper {
     position: absolute;
-    top: -10px;
+    top: 0;
     right: 0;
+    transform: translateY(-50%);
 }
 
 .music-button {
@@ -173,10 +174,20 @@ button:hover {
     background-color: #ffd6e8;
 }
 
-h1 {
-    font-size: 2.5rem;
-    margin: 0;
+/* 반응형 대응 - 모바일에서 버튼이 제목과 겹치지 않도록 */
+@media (max-width: 480px) {
+    .music-button-wrapper {
+        top: 6px;
+        right: 10px;
+        transform: none;
+    }
+
+    h1 {
+        font-size: 2rem;
+        padding-right: 50px; /* 음악 버튼 영역 확보 */
+    }
 }
+
 
 
 
