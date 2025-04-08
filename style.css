@@ -184,11 +184,7 @@ button:hover {
         right: 10px;
         transform: none;
     }
-
-    h1 {
-        font-size: 2rem;
-        padding-right: 50px; /* 음악 버튼 영역 확보 */
-    }
+    
 }
 
 
