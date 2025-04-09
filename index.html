@@ -61,15 +61,15 @@
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modal-img');
     const closeBtn = document.getElementById('close');
+
     let scrollY = 0;
 
     document.querySelectorAll('.item img').forEach(img => {
         img.addEventListener('click', () => {
             modalImg.src = img.src;
 
+            // 현재 스크롤 위치 저장 + body 고정
             scrollY = window.scrollY;
-
-            // 바디 고정
             document.body.style.position = 'fixed';
             document.body.style.top = `-${scrollY}px`;
             document.body.style.left = '0';
@@ -83,6 +83,7 @@
             sessionStorage.setItem('isModalOpen', 'true');
             sessionStorage.setItem('modalImage', img.src);
 
+            // 하트 위치 계산
             setTimeout(() => {
                 const rect = modalImg.getBoundingClientRect();
                 const scrollX = window.scrollX;
@@ -99,8 +100,11 @@
         });
     });
 
+    // 모달 닫기
     function closeModal() {
         modal.style.display = 'none';
+
+        // body 스타일 원상복구 + 스크롤 위치 되돌리기
         document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.left = '';
@@ -113,7 +117,129 @@
     }
 
     closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', closeModal);
+
+    modal.addEventListener('click',closeModal);
+
+
+
+    function createHeartsFromBox(x, y, width, height) {
+        fetch("images/heart-svgrepo-com.svg?cache=" + Date.now())
+            .then(res => res.text())
+            .then(svgText => {
+                // width/height 제거
+                let cleanedSvg = svgText
+                    .replace(/<svg([^>]*)width="[^"]*"([^>]*)>/, '<svg$1$2>')
+                    .replace(/<svg([^>]*)height="[^"]*"([^>]*)>/, '<svg$1$2>');
+
+                // fill/stroke 수정
+                cleanedSvg = cleanedSvg
+                    .replace(/fill="none"/g, 'fill="#ff6b81"')
+                    .replace(/stroke="#[^"]*"/g, 'stroke="none"');
+
+                const centerX = x + width / 2;
+                const centerY = y + height / 2;
+                const maxRadius = Math.min(width, height) * 0.75;
+
+                for (let i = 0; i < 10; i++) {
+                    const angle = Math.random() * 2 * Math.PI;
+                    const radius = Math.random() * maxRadius;
+
+                    const offsetX = Math.cos(angle) * radius;
+                    const offsetY = Math.sin(angle) * radius;
+
+                    const posX = centerX + offsetX;
+                    const posY = centerY + offsetY;
+
+                    const wrapper = document.createElement("div");
+                    wrapper.classList.add("floating-heart");
+                    wrapper.style.position = "absolute";
+                    wrapper.style.left = `${posX}px`;
+                    wrapper.style.top = `${posY}px`;
+                    wrapper.style.width = "32px";
+                    wrapper.style.height = "32px";
+                    wrapper.innerHTML = cleanedSvg;
+
+                    document.body.appendChild(wrapper);
+                    setTimeout(() => wrapper.remove(), 1500);
+                }
+            });
+    }
+
+
+
+
+    function createParticlesFromBox(x, y, width, height) {
+        for (let i = 0; i < 12; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            const angle = Math.random() * 2 * Math.PI;
+            const radius = Math.random() * Math.min(width, height) * 0.75; // 이미지 크기에 비례
+
+            const offsetX = Math.cos(angle) * radius;
+            const offsetY = Math.sin(angle) * radius;
+
+
+            const px = x + width / 2 + offsetX;
+            const py = y + height / 2 + offsetY;
+
+            particle.style.left = `${px}px`;
+            particle.style.top = `${py}px`;
+            particle.style.position = 'absolute';
+
+            const moveAngle = Math.random() * 2 * Math.PI;
+            const dist = Math.random() * 60 + 20;
+
+            particle.style.setProperty('--dest-x', `${Math.cos(angle) * dist}px`);
+            particle.style.setProperty('--dest-y', `${Math.sin(angle) * dist}px`);
+            particle.style.background = ['#ffc1cc', '#ffd6e8', '#ffb3b3', '#ffe4ec'][Math.floor(Math.random() * 4)];
+
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 800);
+        }
+    }
+
+    function createPetal() {
+        const petal = document.createElement("div");
+        petal.classList.add("petal");
+        petal.innerText = "🌸";
+
+        const startLeft = Math.random() * window.innerWidth;
+        const size = Math.random() * 14 + 12; // 12px ~ 26px
+        const duration = Math.random() * 5 + 5; // 5s ~ 10s
+        const delay = Math.random() * 5;
+        const xDrift = Math.random() * 100 - 50 + "px";
+
+        petal.style.left = `${startLeft}px`;
+        petal.style.fontSize = `${size}px`;
+        petal.style.animationDuration = `${duration}s`;
+        petal.style.animationDelay = `${delay}s`;
+        petal.style.setProperty('--x-drift', xDrift);
+
+        document.body.appendChild(petal);
+
+        setTimeout(() => petal.remove(), (duration + delay) * 1000);
+    }
+
+    // 일정 간격으로 계속 생성
+    setInterval(createPetal, 500);
+
+    const audio = document.getElementById("player");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const bar = document.getElementById("bar");
+
+    function togglePlay() {
+        if (audio.paused) {
+            audio.play();
+            playPauseBtn.textContent = "🔇";
+            bar.style.display = "block";
+        } else {
+            audio.pause();
+            playPauseBtn.textContent = "♫";
+            bar.style.display = "none";
+        }
+    }
+
 
     function restoreAppState() {
         const lastScroll = sessionStorage.getItem('scrollY');
@@ -152,7 +278,7 @@
     // 이건 Flutter에서 호출
     // flutter에서 _controller.runJavaScript('restoreAppState()'); 호출 시 실행됨
     window.restoreAppState = restoreAppState;
-</script>
 
+</script>
 </body>
 </html>
