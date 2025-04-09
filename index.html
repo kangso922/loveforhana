@@ -237,7 +237,17 @@
             bar.style.display = "none";
         }
     }
+    function restoreAppState() {
+        const lastScroll = sessionStorage.getItem('scrollY');
+        if (lastScroll) {
+            window.scrollTo(0, parseInt(lastScroll));
+        }
+    }
 
+    // 상태 저장 예시
+    window.addEventListener('scroll', () => {
+        sessionStorage.setItem('scrollY', window.scrollY);
+    });
 </script>
 </body>
 </html>
