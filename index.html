@@ -251,15 +251,18 @@
         }
 
         if (isModalOpen === 'true' && modalImage) {
-            modalImg.src = modalImage;
-            modal.style.display = 'flex';
+            if (isModalOpen === 'true' && modalImage) {
+                setTimeout(() => {
+                    modalImg.src = modalImage;
+                    modal.style.display = 'flex';
 
-            // body 고정
-            document.body.style.position = 'fixed';
-            document.body.style.top = `-${lastScroll}px`;
-            document.body.style.left = '0';
-            document.body.style.right = '0';
-            document.body.style.width = '100%';
+                    document.body.style.position = 'fixed';
+                    document.body.style.top = `-${lastScroll}px`;
+                    document.body.style.left = '0';
+                    document.body.style.right = '0';
+                    document.body.style.width = '100%';
+                }, 50); // ← 여기 지연
+            }
         }
         console.log('[Web] restoreAppState 실행됨', lastScroll, isModalOpen, modalImage);
 
