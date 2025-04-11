@@ -58,299 +58,266 @@
 </audio>
 
 <script>
+    // --- 요소 가져오기 ---
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modal-img');
     const closeBtn = document.getElementById('close');
+    const audio = document.getElementById("player");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const bar = document.getElementById("bar");
 
+    // --- 전역 변수 ---
     let scrollY = 0;
+    let petalIntervalId = null;
 
+    // --- 모달 열기 ---
     document.querySelectorAll('.item img').forEach(img => {
         img.addEventListener('click', () => {
-            modalImg.src = img.src;
+            // 이미지 로드 완료 시 효과 생성 (타이밍 개선)
+            modalImg.onload = () => {
+                console.log("Modal image loaded:", modalImg.src);
+                const rect = modalImg.getBoundingClientRect();
+                // getBoundingClientRect는 viewport 기준이므로 scrollX/Y 불필요
+                createHeartsFromBox(rect.left, rect.top, rect.width, rect.height);
+                createParticlesFromBox(rect.left, rect.top, rect.width, rect.height);
+                modalImg.onload = null; // 핸들러 정리
+                modalImg.onerror = null;
+            };
+            modalImg.onerror = () => {
+                console.error("Failed to load modal image:", modalImg.src);
+                modalImg.onload = null;
+                modalImg.onerror = null;
+            };
 
-            // 현재 스크롤 위치 저장 + body 고정
-            scrollY = window.scrollY;
+            modalImg.src = img.src; // src 설정 (onload 핸들러 설정 후)
+            scrollY = window.scrollY; // 스크롤 위치 저장
+
+            // body 고정
             document.body.style.position = 'fixed';
             document.body.style.top = `-${scrollY}px`;
             document.body.style.left = '0';
             document.body.style.right = '0';
             document.body.style.width = '100%';
 
-            modal.style.display = 'flex';
+            modal.style.display = 'flex'; // 모달 표시
 
-            // 세션에 저장
+            // 세션 스토리지 저장
             sessionStorage.setItem('scrollY', scrollY);
             sessionStorage.setItem('isModalOpen', 'true');
             sessionStorage.setItem('modalImage', img.src);
-
-            // 하트 위치 계산
-            setTimeout(() => {
-                const rect = modalImg.getBoundingClientRect();
-                const scrollX = window.scrollX;
-                const scrollY = window.scrollY;
-
-                const imageX = rect.left + scrollX;
-                const imageY = rect.top + scrollY;
-                const imageWidth = rect.width;
-                const imageHeight = rect.height;
-
-                createHeartsFromBox(imageX, imageY, imageWidth, imageHeight);
-                createParticlesFromBox(imageX, imageY, imageWidth, imageHeight);
-            }, 0);
         });
     });
 
-    // 모달 닫기
+    // --- 모달 닫기 ---
     function closeModal() {
         modal.style.display = 'none';
-
-        // body 스타일 원상복구 + 스크롤 위치 되돌리기
         document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.left = '';
         document.body.style.right = '';
         document.body.style.width = '';
-        window.scrollTo(0, scrollY);
-
-        // 모달 닫힘 상태 저장
+        // 스크롤 복원 (렌더링 시간 고려)
+        requestAnimationFrame(() => window.scrollTo(0, scrollY));
         sessionStorage.setItem('isModalOpen', 'false');
     }
-
     closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) closeModal();
+    });
 
-    modal.addEventListener('click',closeModal);
-
-
-
+    // --- 하트/파티클 생성 함수들 ---
     function createHeartsFromBox(x, y, width, height) {
+        // SVG fetch 및 DOM 조작 (이전과 동일)
         fetch("images/heart-svgrepo-com.svg?cache=" + Date.now())
-            .then(res => res.text())
+            .then(res => { if (!res.ok) throw new Error('Network response was not ok'); return res.text(); })
             .then(svgText => {
-                // width/height 제거
-                let cleanedSvg = svgText
-                    .replace(/<svg([^>]*)width="[^"]*"([^>]*)>/, '<svg$1$2>')
-                    .replace(/<svg([^>]*)height="[^"]*"([^>]*)>/, '<svg$1$2>');
-
-                // fill/stroke 수정
-                cleanedSvg = cleanedSvg
-                    .replace(/fill="none"/g, 'fill="#ff6b81"')
-                    .replace(/stroke="#[^"]*"/g, 'stroke="none"');
-
+                let cleanedSvg = svgText.replace(/<svg([^>]*)width="[^"]*"([^>]*)>/, '<svg$1$2>').replace(/<svg([^>]*)height="[^"]*"([^>]*)>/, '<svg$1$2>').replace(/fill="none"/g, 'fill="#ff6b81"').replace(/stroke="#[^"]*"/g, 'stroke="none"');
                 const centerX = x + width / 2;
                 const centerY = y + height / 2;
-                const maxRadius = Math.min(width, height) * 0.75;
-
-                for (let i = 0; i < 10; i++) {
+                const maxRadius = Math.min(width, height) * 0.6;
+                for (let i = 0; i < 10; i++) { /* ... 이전과 동일 ... */
                     const angle = Math.random() * 2 * Math.PI;
                     const radius = Math.random() * maxRadius;
-
                     const offsetX = Math.cos(angle) * radius;
                     const offsetY = Math.sin(angle) * radius;
-
                     const posX = centerX + offsetX;
                     const posY = centerY + offsetY;
-
                     const wrapper = document.createElement("div");
                     wrapper.classList.add("floating-heart");
-                    wrapper.style.position = "absolute";
-                    wrapper.style.left = `${posX}px`;
-                    wrapper.style.top = `${posY}px`;
-                    wrapper.style.width = "32px";
-                    wrapper.style.height = "32px";
-                    wrapper.innerHTML = cleanedSvg;
-
+                    wrapper.style.position = "fixed"; wrapper.style.left = `${posX}px`; wrapper.style.top = `${posY}px`; wrapper.style.width = "32px"; wrapper.style.height = "32px"; wrapper.innerHTML = cleanedSvg;
                     document.body.appendChild(wrapper);
                     setTimeout(() => wrapper.remove(), 1500);
                 }
-            });
+            }).catch(error => console.error("Heart SVG Error:", error));
     }
-
-
-
-
     function createParticlesFromBox(x, y, width, height) {
-        for (let i = 0; i < 12; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-
-            const angle = Math.random() * 2 * Math.PI;
-            const radius = Math.random() * Math.min(width, height) * 0.75; // 이미지 크기에 비례
-
-            const offsetX = Math.cos(angle) * radius;
-            const offsetY = Math.sin(angle) * radius;
-
-
-            const px = x + width / 2 + offsetX;
-            const py = y + height / 2 + offsetY;
-
-            particle.style.left = `${px}px`;
-            particle.style.top = `${py}px`;
-            particle.style.position = 'absolute';
-
-            const moveAngle = Math.random() * 2 * Math.PI;
-            const dist = Math.random() * 60 + 20;
-
-            particle.style.setProperty('--dest-x', `${Math.cos(angle) * dist}px`);
-            particle.style.setProperty('--dest-y', `${Math.sin(angle) * dist}px`);
-            particle.style.background = ['#ffc1cc', '#ffd6e8', '#ffb3b3', '#ffe4ec'][Math.floor(Math.random() * 4)];
-
-            document.body.appendChild(particle);
-            setTimeout(() => particle.remove(), 800);
+        // 파티클 생성 및 애니메이션 (이전과 동일)
+        for (let i = 0; i < 12; i++) { /* ... 이전과 동일 ... */
+            const particle = document.createElement('div'); particle.classList.add('particle');
+            const angle = Math.random() * 2 * Math.PI; const radius = Math.random() * Math.min(width, height) * 0.6; const offsetX = Math.cos(angle) * radius; const offsetY = Math.sin(angle) * radius;
+            const px = x + width / 2 + offsetX; const py = y + height / 2 + offsetY;
+            particle.style.left = `${px}px`; particle.style.top = `${py}px`; particle.style.position = 'fixed';
+            const moveAngle = Math.random() * 2 * Math.PI; const dist = Math.random() * 60 + 20;
+            particle.style.setProperty('--dest-x', `${Math.cos(moveAngle) * dist}px`); particle.style.setProperty('--dest-y', `${Math.sin(moveAngle) * dist}px`); particle.style.background = ['#ffc1cc', '#ffd6e8', '#ffb3b3', '#ffe4ec'][Math.floor(Math.random() * 4)];
+            document.body.appendChild(particle); setTimeout(() => particle.remove(), 800);
         }
     }
-
     function createPetal() {
-        const petal = document.createElement("div");
-        petal.classList.add("petal");
-        petal.innerText = "🌸";
-
-        const startLeft = Math.random() * window.innerWidth;
-        const size = Math.random() * 14 + 12; // 12px ~ 26px
-        const duration = Math.random() * 5 + 5; // 5s ~ 10s
-        const delay = Math.random() * 5;
-        const xDrift = Math.random() * 100 - 50 + "px";
-
-        petal.style.left = `${startLeft}px`;
-        petal.style.fontSize = `${size}px`;
-        petal.style.animationDuration = `${duration}s`;
-        petal.style.animationDelay = `${delay}s`;
-        petal.style.setProperty('--x-drift', xDrift);
-
-        document.body.appendChild(petal);
-
-        setTimeout(() => petal.remove(), (duration + delay) * 1000);
+        // 벚꽃잎 생성 및 애니메이션 (이전과 동일)
+        const petal = document.createElement("div"); petal.classList.add("petal"); petal.innerText = "🌸";
+        const startLeft = Math.random() * window.innerWidth; const size = Math.random() * 14 + 12; const duration = Math.random() * 5 + 5; const delay = Math.random() * 5; const xDrift = Math.random() * 100 - 50 + "px";
+        petal.style.left = `${startLeft}px`; petal.style.fontSize = `${size}px`; petal.style.animationDuration = `${duration}s`; petal.style.animationDelay = `${delay}s`; petal.style.setProperty('--x-drift', xDrift);
+        document.body.appendChild(petal); setTimeout(() => petal.remove(), (duration + delay) * 1000);
     }
 
-    // 일정 간격으로 계속 생성
-    setInterval(createPetal, 500);
-
-    const audio = document.getElementById("player");
-    const playPauseBtn = document.getElementById("playPauseBtn");
-    const bar = document.getElementById("bar");
-
+    // --- 오디오 재생/일시정지 토글 및 상태 저장 ---
     function togglePlay() {
+        if (!audio) return;
         if (audio.paused) {
-            audio.play();
-            playPauseBtn.textContent = "🔇";
-            bar.style.display = "block";
-            sessionStorage.setItem('audioPaused', 'false'); // 오디오 상태 저장
-        } else {
-            audio.pause();
-            playPauseBtn.textContent = "♫";
-            bar.style.display = "none";
-            sessionStorage.setItem('audioPaused', 'true'); // 오디오 상태 저장
-        }
-        // 현재 시간 저장
-         sessionStorage.setItem('audioTime', audio.currentTime);
-    }
-
-    // --- 오디오 상태 복원 ---
-    function restoreAppState() {
-        // ... (기존 스크롤, 모달 복원 로직) ...
-
-        const audioPaused = sessionStorage.getItem('audioPaused');
-        // const audioTime = sessionStorage.getItem('audioTime'); // 필요시 시간 복원
-
-        if (audioPaused === 'false') {
-            // 저장된 상태가 '재생 중' 이었으면 다시 재생
-            // 사용자와 상호작용 없이 바로 play() 호출은 일부 브라우저/웹뷰에서 막힐 수 있으므로 주의
-            // play()가 Promise를 반환하므로 .catch()로 오류 처리 권장
             audio.play().then(() => {
-                playPauseBtn.textContent = "🔇";
-                bar.style.display = "block";
-                // if (audioTime) audio.currentTime = parseFloat(audioTime); // 시간 복원
+                playPauseBtn.textContent = "🔇"; bar.style.display = "block";
+                sessionStorage.setItem('audioPaused', 'false'); // 저장
+                sessionStorage.setItem('audioTime', audio.currentTime); // 저장
+                console.log('[Web] togglePlay: Playing, state saved.');
             }).catch(error => {
-                console.error("Audio play failed:", error);
-                // 자동 재생 실패 시 UI를 초기 상태로 되돌릴 수 있음
-                playPauseBtn.textContent = "♫";
-                bar.style.display = "none";
-                sessionStorage.setItem('audioPaused', 'true');
+                console.error("[Web] togglePlay: Audio play failed:", error);
+                playPauseBtn.textContent = "♫"; bar.style.display = "none";
+                sessionStorage.setItem('audioPaused', 'true'); // 실패 시 저장
             });
         } else {
-            // '일시정지' 상태였거나 저장된 값 없으면 기본값 (일시정지)
-            audio.pause();
-            playPauseBtn.textContent = "♫";
-            bar.style.display = "none";
+            audio.pause(); playPauseBtn.textContent = "♫"; bar.style.display = "none";
+            sessionStorage.setItem('audioPaused', 'true'); // 저장
+            sessionStorage.setItem('audioTime', audio.currentTime); // 저장
+            console.log('[Web] togglePlay: Paused, state saved.');
         }
+    }
+    playPauseBtn.addEventListener('click', togglePlay); // 버튼 리스너 연결
 
-        console.log('[Web] restoreAppState 실행됨', lastScroll, isModalOpen, modalImage, 'Audio Paused:', audioPaused);
+    // --- 상태 복원 함수 (!!! 유일한 정의 !!!) ---
+    function restoreAppState() {
+        console.log('[Web] +++++ restoreAppState START +++++');
+        try {
+            // 1. 값 읽기 (상세 로깅 포함)
+            const lastScroll = sessionStorage.getItem('scrollY');
+            const isModalOpen = sessionStorage.getItem('isModalOpen');
+            const modalImage = sessionStorage.getItem('modalImage');
+            const audioPaused = sessionStorage.getItem('audioPaused');
+            const audioTime = sessionStorage.getItem('audioTime');
+            console.log('[Web] 1. Read from sessionStorage:', { lastScroll, isModalOpen, modalImage, audioPaused, audioTime });
+
+            // 2. 스크롤 복원 (상세 로깅 포함)
+            if (lastScroll) {
+                const scrollVal = parseInt(lastScroll);
+                console.log('[Web] 2. Attempting scroll restore to:', scrollVal);
+                setTimeout(() => { // 지연 유지
+                    window.scrollTo(0, scrollVal);
+                    console.log('[Web] 2. Scroll restoration attempted. Current scrollY:', window.scrollY);
+                }, 100);
+            } else { console.log('[Web] 2. No saved scroll position.'); }
+
+            // 3. 모달 복원 (상세 로깅 포함)
+            console.log('[Web] 3. Checking modal state...');
+            if (isModalOpen === 'true' && modalImage) {
+                console.log('[Web] 3.1. Attempting to restore modal.');
+                modalImg.onload = () => { // onload 사용
+                    console.log('[Web] 3.2. Modal image loaded.');
+                    modal.style.display = 'flex';
+                    document.body.style.position = 'fixed';
+                    const topOffset = `-${lastScroll || 0}px`;
+                    document.body.style.top = topOffset;
+                    document.body.style.left = '0'; document.body.style.right = '0'; document.body.style.width = '100%';
+                    console.log('[Web] 3.3. Modal displayed and body fixed. Top:', topOffset);
+                    modalImg.onload = null; modalImg.onerror = null;
+                };
+                modalImg.onerror = () => { console.error("[Web] 3.E. Failed to load modal image for restoration:", modalImage); modalImg.onload = null; modalImg.onerror = null; };
+                modalImg.src = modalImage; // src 설정
+                console.log('[Web] 3.4. Modal image src set.');
+            } else {
+                console.log('[Web] 3.5. Ensuring modal is closed.');
+                modal.style.display = 'none';
+                document.body.style.position = ''; document.body.style.top = ''; document.body.style.left = ''; document.body.style.right = ''; document.body.style.width = '';
+            }
+
+            // 4. 오디오 복원 (상세 로깅 포함)
+            console.log('[Web] 4. Checking audio state...');
+            if (audio) {
+                const targetTime = audioTime ? parseFloat(audioTime) : 0;
+                console.log('[Web] 4.1. Target audio time:', targetTime);
+                console.log('[Web] 4.2. Audio properties BEFORE play attempt:', { src: audio.src, currentTime: audio.currentTime, duration: audio.duration, readyState: audio.readyState, networkState: audio.networkState, error: audio.error, paused: audio.paused });
+
+                // currentTime 설정
+                if (audio.readyState >= 1) {
+                    try { audio.currentTime = targetTime; } catch(e){ console.error("Error setting currentTime:", e); }
+                    console.log('[Web] 4.2.1. Set audio currentTime to:', audio.currentTime);
+                } else {
+                    audio.onloadedmetadata = () => {
+                        try { audio.currentTime = targetTime; } catch(e){ console.error("Error setting currentTime (onloadedmetadata):", e); }
+                        console.log('[Web] 4.2.2. (onloadedmetadata) Set audio currentTime to:', audio.currentTime);
+                        audio.onloadedmetadata = null;
+                    }
+                }
+
+                // 재생/일시정지 상태 복원
+                if (audioPaused === 'false') {
+                    console.log('[Web] 4.3. Attempting to call audio.play()...');
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            playPauseBtn.textContent = "🔇"; bar.style.display = "block";
+                            console.log('[Web] 4.4. Audio play() Promise resolved (Success).');
+                        }).catch(error => {
+                            console.error("[Web] 4.E. !!! Audio play() Promise rejected !!!", error);
+                            playPauseBtn.textContent = "♫"; bar.style.display = "none";
+                            sessionStorage.setItem('audioPaused', 'true');
+                        });
+                    } else { console.warn("[Web] 4.W. audio.play() did not return a Promise."); playPauseBtn.textContent = "🔇"; bar.style.display = "block"; }
+                } else {
+                    console.log('[Web] 4.5. Setting audio to paused.');
+                    audio.pause(); playPauseBtn.textContent = "♫"; bar.style.display = "none";
+                }
+            } else { console.warn("[Web] 4.W. Audio element #player not found."); }
+        } catch (error) { console.error('[Web] !!!!! CRITICAL Error inside restoreAppState !!!!!', error, error.stack);
+        } finally { console.log('[Web] ----- restoreAppState END -----'); }
     }
 
-    // --- 페이지 표시 상태 변경 시 처리 ---
-    let petalIntervalId = null; // 벚꽃 생성 interval ID 저장용
-
+    // --- 페이지 가시성 변경 처리 ---
     function handleVisibilityChange() {
         if (document.hidden) {
-            // 페이지가 숨겨짐 (앱 백그라운드 등)
             console.log("Page is hidden");
-            // 음악 일시정지 (선택적: 사용자가 원하지 않을 수 있음)
-            // if (!audio.paused) {
-            //     togglePlay(); // 상태 저장 포함
-            // }
-            // 벚꽃 생성 중지
-            if (petalIntervalId) {
-                clearInterval(petalIntervalId);
-                petalIntervalId = null;
-            }
+            if (petalIntervalId) { clearInterval(petalIntervalId); petalIntervalId = null; console.log("Petal interval cleared."); }
+            // 선택적: 음악 일시정지
+            // if (audio && !audio.paused) { togglePlay(); }
         } else {
-            // 페이지가 다시 보여짐 (앱 포그라운드 등)
             console.log("Page is visible");
-            // 벚꽃 생성 다시 시작
-            if (!petalIntervalId) {
-                petalIntervalId = setInterval(createPetal, 500);
-            }
-            // 필요하다면 여기서 restoreAppState() 재호출 고려 (더 확실한 복원 위해)
+            if (!petalIntervalId) { petalIntervalId = setInterval(createPetal, 500); console.log("Petal interval restarted."); }
+            // 선택적: 페이지 보일 때 상태 재확인/복원
             // restoreAppState();
         }
     }
-
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // 최초 벚꽃 생성 시작
-    petalIntervalId = setInterval(createPetal, 500);
-
-    function restoreAppState() {
-        const lastScroll = sessionStorage.getItem('scrollY');
-        const isModalOpen = sessionStorage.getItem('isModalOpen');
-        const modalImage = sessionStorage.getItem('modalImage');
-
-        if (lastScroll) {
-            window.scrollTo(0, parseInt(lastScroll));
-        }
-
-        if (isModalOpen === 'true' && modalImage) {
-            if (isModalOpen === 'true' && modalImage) {
-                setTimeout(() => {
-                    modalImg.src = modalImage;
-                    modal.style.display = 'flex';
-
-                    document.body.style.position = 'fixed';
-                    document.body.style.top = `-${lastScroll}px`;
-                    document.body.style.left = '0';
-                    document.body.style.right = '0';
-                    document.body.style.width = '100%';
-                }, 50); // ← 여기 지연
-            }
-        }
-        console.log('[Web] restoreAppState 실행됨', lastScroll, isModalOpen, modalImage);
-
-    }
-
+    // --- 스크롤 위치 저장 ---
     window.addEventListener('scroll', () => {
-        sessionStorage.setItem('scrollY', window.scrollY);
+        if (document.body.style.position !== 'fixed') { sessionStorage.setItem('scrollY', window.scrollY); }
     });
 
+    // --- 페이지 로드 완료 시 ---
     window.addEventListener('load', () => {
-        if (window.flutter_inappwebview) {
-            window.flutter_inappwebview.callHandler('pageLoaded');
-        } else if (window.flutter_channel) {
-            window.flutter_channel.postMessage('pageLoaded');
-        }
+        console.log("Page finished loading.");
+        // 불필요 플러터 통신 코드 제거됨
     });
 
-    // 이건 Flutter에서 호출
-    // flutter에서 _controller.runJavaScript('restoreAppState()'); 호출 시 실행됨
+    // --- 전역 오류 핸들러 ---
+    window.onerror = function(message, source, lineno, colno, error) { console.error("[Web] Global Uncaught Error:", { message, source, lineno, colno, errorObject: error }); };
+    window.addEventListener('unhandledrejection', function(event) { console.error('[Web] Global Unhandled Promise Rejection:', event.reason); });
+
+    // --- 안드로이드에서 호출 가능하도록 함수 전역 노출 ---
     window.restoreAppState = restoreAppState;
+
+    // --- 최초 벚꽃 생성 시작 ---
+    if (!petalIntervalId) { petalIntervalId = setInterval(createPetal, 500); }
+
+    // !!! 스크립트 끝 부분의 중복 restoreAppState 함수 정의가 제거되었습니다 !!!
 
 </script>
 </body>
