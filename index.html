@@ -256,77 +256,131 @@
     playPauseBtn.addEventListener('click', togglePlay);
 
     // --- 상태 복원 함수 (유일한 정의, 오디오 복원 포함) ---
+    // HTML <script>의 restoreAppState 함수 수정 (극도로 상세한 로깅)
+
     function restoreAppState() {
-        console.log('[Web] Attempting to restore app state...');
-        const lastScroll = sessionStorage.getItem('scrollY');
-        const isModalOpen = sessionStorage.getItem('isModalOpen');
-        const modalImage = sessionStorage.getItem('modalImage');
-        const audioPaused = sessionStorage.getItem('audioPaused');
-        const audioTime = sessionStorage.getItem('audioTime');
+        console.log('[Web] +++++ restoreAppState START +++++');
+        try {
+            // --- 1. 값 읽기 ---
+            const lastScroll = sessionStorage.getItem('scrollY');
+            const isModalOpen = sessionStorage.getItem('isModalOpen');
+            const modalImage = sessionStorage.getItem('modalImage');
+            const audioPaused = sessionStorage.getItem('audioPaused');
+            const audioTime = sessionStorage.getItem('audioTime');
+            console.log('[Web] 1. Read from sessionStorage:', { lastScroll, isModalOpen, modalImage, audioPaused, audioTime });
 
-        // 스크롤 위치 복원
-        if (lastScroll) {
-            setTimeout(() => {
-                window.scrollTo(0, parseInt(lastScroll));
-                console.log('[Web] Scroll restored to:', lastScroll);
-            }, 100);
-        }
+            // --- 2. 스크롤 복원 ---
+            if (lastScroll) {
+                const scrollVal = parseInt(lastScroll);
+                console.log('[Web] 2. Attempting scroll restore to:', scrollVal);
+                // 스크롤은 비동기 렌더링 고려하여 지연 유지
+                setTimeout(() => {
+                    window.scrollTo(0, scrollVal);
+                    console.log('[Web] 2. Scroll restoration attempted. Current scrollY:', window.scrollY);
+                }, 100);
+            } else {
+                console.log('[Web] 2. No saved scroll position.');
+            }
 
-        // 모달 상태 복원
-        if (isModalOpen === 'true' && modalImage) {
-            modalImg.onload = () => {
-                modal.style.display = 'flex';
-                document.body.style.position = 'fixed';
-                document.body.style.top = `-${lastScroll || 0}px`;
-                document.body.style.left = '0';
-                document.body.style.right = '0';
-                document.body.style.width = '100%';
-                console.log('[Web] Modal restored:', modalImage);
-                modalImg.onload = null;
-                modalImg.onerror = null;
-            };
-            modalImg.onerror = () => {
-                console.error("Failed to load modal image for restoration:", modalImage);
-                modalImg.onload = null;
-                modalImg.onerror = null;
-            };
-            modalImg.src = modalImage;
-            // setTimeout 제거됨
-        } else {
-            modal.style.display = 'none';
-            document.body.style.position = '';
-            document.body.style.top = '';
-            document.body.style.left = '';
-            document.body.style.right = '';
-            document.body.style.width = '';
-        }
+            // --- 3. 모달 복원 ---
+            console.log('[Web] 3. Checking modal state. isModalOpen:', isModalOpen, 'modalImage:', modalImage);
+            if (isModalOpen === 'true' && modalImage) {
+                console.log('[Web] 3.1. Attempting to restore modal.');
+                modalImg.onload = () => {
+                    console.log('[Web] 3.2. Modal image loaded.');
+                    modal.style.display = 'flex';
+                    document.body.style.position = 'fixed';
+                    const topOffset = `-${lastScroll || 0}px`;
+                    document.body.style.top = topOffset;
+                    document.body.style.left = '0';
+                    document.body.style.right = '0';
+                    document.body.style.width = '100%';
+                    console.log('[Web] 3.3. Modal displayed and body fixed. Top:', topOffset);
+                    modalImg.onload = null;
+                    modalImg.onerror = null;
+                };
+                modalImg.onerror = () => {
+                    console.error("[Web] 3.E. Failed to load modal image for restoration:", modalImage);
+                    modalImg.onload = null;
+                    modalImg.onerror = null;
+                };
+                modalImg.src = modalImage; // 핸들러 설정 후 src 지정
+                console.log('[Web] 3.4. Modal image src set.');
+            } else {
+                console.log('[Web] 3.5. Ensuring modal is closed.');
+                modal.style.display = 'none';
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.left = '';
+                document.body.style.right = '';
+                document.body.style.width = '';
+            }
 
-        // 오디오 상태 복원
-        if (audio) {
-            if (audioPaused === 'false') {
-                if (audioTime) audio.currentTime = parseFloat(audioTime);
-                audio.play().then(() => {
-                    playPauseBtn.textContent = "🔇";
-                    bar.style.display = "block";
-                    console.log('[Web] Audio restored to playing at time:', audio.currentTime);
-                }).catch(error => {
-                    console.error("Audio play failed on restore:", error);
+            // --- 4. 오디오 복원 ---
+            console.log('[Web] 4. Checking audio state. audioPaused:', audioPaused);
+            if (audio) {
+                const targetTime = audioTime ? parseFloat(audioTime) : 0;
+                console.log('[Web] 4.1. Target audio time:', targetTime);
+                // 오디오 로드 상태 확인 후 시간 설정 시도 (더 안정적)
+                if (audio.readyState >= 1) { // HAVE_METADATA or higher
+                    audio.currentTime = targetTime;
+                    console.log('[Web] 4.2. Set audio currentTime to:', audio.currentTime);
+                } else {
+                    // 로드가 안됐으면 로드 후 시간 설정 시도
+                    audio.onloadedmetadata = () => {
+                        audio.currentTime = targetTime;
+                        console.log('[Web] 4.2. (onloadedmetadata) Set audio currentTime to:', audio.currentTime);
+                        audio.onloadedmetadata = null; // 핸들러 제거
+                    }
+                }
+
+                if (audioPaused === 'false') {
+                    console.log('[Web] 4.3. Attempting to play audio.');
+                    // play()는 사용자의 상호작용 후에만 성공할 가능성이 높음 (특히 모바일)
+                    audio.play().then(() => {
+                        playPauseBtn.textContent = "🔇";
+                        bar.style.display = "block";
+                        console.log('[Web] 4.4. Audio play success.');
+                    }).catch(error => {
+                        console.error("[Web] 4.E. Audio play failed on restore:", error);
+                        playPauseBtn.textContent = "♫";
+                        bar.style.display = "none";
+                        sessionStorage.setItem('audioPaused', 'true'); // 실패 시 상태 업데이트
+                    });
+                } else {
+                    console.log('[Web] 4.5. Setting audio to paused.');
+                    audio.pause();
                     playPauseBtn.textContent = "♫";
                     bar.style.display = "none";
-                    sessionStorage.setItem('audioPaused', 'true');
-                });
+                }
             } else {
-                audio.pause();
-                playPauseBtn.textContent = "♫";
-                bar.style.display = "none";
-                if (audioTime) audio.currentTime = parseFloat(audioTime);
-                console.log('[Web] Audio restored to paused at time:', audio.currentTime);
+                console.warn("[Web] 4.W. Audio element #player not found.");
             }
-        } else {
-            console.warn("Audio element #player not found during restoreAppState.");
+        } catch (error) {
+            // 함수 실행 중 발생한 모든 오류 로깅
+            console.error('[Web] !!!!! CRITICAL Error inside restoreAppState !!!!!', error, error.stack);
+        } finally {
+            console.log('[Web] ----- restoreAppState END -----');
         }
-        console.log('[Web] restoreAppState finished.');
     }
+
+    // --- !!! 중요: 전역 오류 핸들러 추가 !!! ---
+    window.onerror = function(message, source, lineno, colno, error) {
+        console.error("[Web] Global Uncaught Error:", {
+            message: message,
+            source: source,
+            lineno: lineno,
+            colno: colno,
+            errorObject: error
+        });
+        // 오류 발생 시 true를 반환하면 브라우저 콘솔에 기본 오류 메시지가 표시되지 않도록 할 수 있음
+        // return true;
+    };
+
+    window.addEventListener('unhandledrejection', function(event) {
+        console.error('[Web] Global Unhandled Promise Rejection:', event.reason);
+    });
+
 
     // --- 페이지 가시성 변경 처리 ---
     function handleVisibilityChange() {
