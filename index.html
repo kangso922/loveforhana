@@ -284,9 +284,8 @@
     // flutter에서 _controller.runJavaScript('restoreAppState()'); 호출 시 실행됨
     window.restoreAppState = restoreAppState;
 
-    if (!window.name) {
-      window.name = 'flutter_hybrid_test';
-    }
+    window.name = "someMarker|현재상태데이터";
+
 </script>
 </body>
 </html>
