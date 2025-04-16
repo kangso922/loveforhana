@@ -36,8 +36,8 @@
     <!-- 사이드 메뉴 -->
     <nav class="sidebar" id="sidebar">
         <ul>
-            <li><a href="./index.html">🐱🐶 원쏘!</a></li>
-            <li><a href="./list.html">🎨 크로키</a></li>
+            <li><a href="#" data-page="index.html">🐱🐶 원쏘!</a></li>
+            <li><a href="#" data-page="list.html">🎨 크로키</a></li>
         </ul>
     </nav>
 
@@ -337,6 +337,99 @@
 
     // !!! 스크립트 끝 부분의 중복 restoreAppState 함수 정의가 제거되었습니다 !!!
 
+    function bindGalleryEvents(containerRoot) {
+        const hamburger = containerRoot.querySelector('#hamburger');
+        const sidebar = containerRoot.querySelector('#sidebar');
+        if (hamburger && sidebar) {
+            hamburger.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+
+        // 이미지 클릭 → 모달 열기
+        containerRoot.querySelectorAll('.item img').forEach(img => {
+            img.addEventListener('click', () => {
+                if (!modal || !modalImg) return;
+
+                modalImg.onload = () => {
+                    const rect = modalImg.getBoundingClientRect();
+                    createHeartsFromBox(rect.left, rect.top, rect.width, rect.height);
+                    createParticlesFromBox(rect.left, rect.top, rect.width, rect.height);
+                    modalImg.onload = null;
+                    modalImg.onerror = null;
+                };
+                modalImg.onerror = () => {
+                    console.error("Failed to load modal image:", modalImg.src);
+                    modalImg.onload = null;
+                    modalImg.onerror = null;
+                };
+
+                modalImg.src = img.src;
+                scrollY = window.scrollY;
+                document.body.style.position = 'fixed';
+                document.body.style.top = `-${scrollY}px`;
+                document.body.style.left = '0';
+                document.body.style.right = '0';
+                document.body.style.width = '100%';
+                modal.style.display = 'flex';
+
+                sessionStorage.setItem('scrollY', scrollY);
+                sessionStorage.setItem('isModalOpen', 'true');
+                sessionStorage.setItem('modalImage', img.src);
+            });
+        });
+
+        // 사이드바 링크 다시 바인딩 (여기 추가!)
+        containerRoot.querySelectorAll("nav.sidebar a[data-page]").forEach(link => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                const page = link.getAttribute("data-page");
+                loadGallery(page); // 이건 전역 함수니까 그대로 사용 가능
+            });
+        });
+    }
+
+    function loadGallery(page) {
+        if (modal && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.left = '';
+            document.body.style.right = '';
+            document.body.style.width = '';
+        }
+        sessionStorage.setItem('isModalOpen', 'false');
+        sessionStorage.removeItem('modalImage');
+
+        fetch(page)
+            .then(res => res.text())
+            .then(html => {
+                const temp = document.createElement("div");
+                temp.innerHTML = html;
+                const newContainer = temp.querySelector(".container");
+                if (newContainer) {
+                    const container = document.querySelector(".container"); // 🔧 이 줄 추가
+                    container.replaceWith(newContainer);
+
+                    const updatedContainer = document.querySelector(".container");
+                    bindGalleryEvents(updatedContainer);
+                }
+            });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const sidebarLinks = document.querySelectorAll("nav.sidebar a[data-page]");
+        const gallery = document.querySelector(".container");
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                const page = link.getAttribute("data-page");
+                loadGallery(page);
+            });
+        });
+
+    });
 </script>
 </body>
 </html>
