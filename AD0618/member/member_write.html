@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원 등록</title>
+    <link rel="stylesheet" href="/AD0618/static/css/member.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- 상단바 -->
+<header class="admin-topbar">
+    <div class="admin-topbar-title">하나떵개 관리자 시스템</div>
+    <div class="admin-topbar-nav">
+        <a href="member_list.html">회원 목록</a>
+        <a href="../login.html">로그아웃</a>
+    </div>
+</header>
+
+<!-- 본문 전체 구조 -->
+<div class="admin-layout">
+    <!-- 사이드바 -->
+    <aside class="admin-sidebar">
+        <nav>
+            <ul>
+                <li><a href="member_list.html">회원 목록</a></li>
+                <li><a href="../login.html">로그아웃</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="admin-main">
+        <div class="page-header">
+            <h1>회원 등록</h1>
+            <p class="page-subtitle">새로운 회원 정보를 입력하세요.</p>
+        </div>
+
+        <section class="card">
+            <form class="member-form">
+                <div class="form-row">
+                    <label for="userid">회원 ID</label>
+                    <input type="text" id="userid" name="userid" required />
+                </div>
+                <div class="form-row">
+                    <label for="username">이름</label>
+                    <input type="text" id="username" name="username" required />
+                </div>
+                <div class="form-row">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" name="email" required />
+                </div>
+                <div class="form-row">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">등록</button>
+                    <a href="member_list.html" class="btn-cancel">취소</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+
+<footer class="admin-footer">
+    ⓒ 2025 하나떵개 Admin
+</footer>
+
+</body>
+</html>

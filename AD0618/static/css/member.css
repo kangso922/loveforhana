@@ -1,0 +1,361 @@
+/* 공통 스타일 */
+body {
+    background: #f5f6fa;
+    font-family: 'Pretendard', 'Noto Sans KR', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* 공통 컨테이너 스타일 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.admin-topbar {
+    background: #4a6cf7;
+    color: #fff;
+    padding: 1rem 2rem; /* 상대 단위로 변경 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0.125rem 0.5rem rgba(74, 108, 247, 0.08);
+}
+
+.admin-topbar-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 0.05rem;
+}
+
+.admin-topbar-nav a {
+    color: #fff;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: background 0.2s;
+}
+
+.admin-topbar-nav a.active,
+.admin-topbar-nav a:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* 레이아웃 스타일 */
+.admin-layout {
+    display: flex;
+    min-height: 80vh;
+}
+
+/* 사이드바 스타일 */
+.admin-sidebar {
+    width: 15%; /* 사이드바 너비 */
+    background: #e9eef6;
+    padding: 1.5rem 0;
+    box-shadow: 0.0625rem 0 0 #e0e7ff;
+}
+
+.admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-sidebar li {
+    margin-bottom: 1rem;
+}
+
+.admin-sidebar a {
+    display: block;
+    color: #1a2233;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem 0 0 0.25rem;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+
+.admin-sidebar a.active {
+    color: #4a6cf7;
+}
+
+.admin-sidebar a:hover {
+    background: #e0e7ff;
+    color: #4a6cf7;
+}
+
+/* 메인 콘텐츠 스타일 */
+.admin-main {
+    flex: 1;
+    padding: 2rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.page-header h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+    color: #4a6cf7;
+}
+
+.page-subtitle {
+    color: #6c7a89;
+    margin-bottom: 1.5rem;
+}
+
+/* 카드 스타일 수정 */
+.card {
+    background: #f5f8ff;
+    border-radius: 0.5rem; /* 둥근 모서리 */
+    box-shadow: 0 0.125rem 0.5rem rgba(74, 108, 247, 0.06);
+    padding: 1.5rem 2%; /* 내부 여백을 줄임 */
+    width: 100%; /* 카드가 메인 콘텐츠를 꽉 채우도록 설정 */
+    margin: 0; /* 카드 외부 여백 제거 */
+    box-sizing: border-box; /* 테두리 포함 크기 계산 */
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(74, 108, 247, 0.04);
+}
+
+.user-table th,
+.user-table td {
+    padding: 12px 8px;
+    text-align: center;
+}
+
+.user-table th {
+    background: #4a6cf7;
+    color: #fff;
+    font-weight: 600;
+    border-bottom: 2px solid #e0e7ff;
+}
+
+.user-table tr:nth-child(even) {
+    background: #f5f6fa;
+}
+
+.user-table tr:nth-child(odd) {
+    background: #fff;
+}
+
+.user-table tr:hover {
+    background: #e0e7ff;
+}
+
+.admin-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+/* 테이블 스타일 수정 */
+.form-table {
+    width: 100%; /* 테이블이 카드 내부를 꽉 채우도록 설정 */
+    border-collapse: collapse;
+    margin: 0; /* 테이블 외부 여백 제거 */
+}
+
+.form-table th {
+    text-align: left;
+    padding: 0.8rem; /* 셀 내부 여백 축소 */
+    background: #f5f8ff;
+    color: #4a6cf7;
+    font-weight: 600;
+    width: 25%; /* 열 너비를 비율로 설정 */
+    border-bottom: 1px solid #e0e7ff;
+}
+
+.form-table td {
+    padding: 0.8rem; /* 셀 내부 여백 축소 */
+    background: #fff;
+    border-bottom: 1px solid #e0e7ff;
+}
+
+.form-table input {
+    width: 100%; /* 입력 필드가 셀 너비를 꽉 채우도록 설정 */
+    padding: 0.5rem 0.75rem; /* 입력 필드 내부 여백 축소 */
+    border: 1px solid #e0e7ff;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    background: #f5f8ff;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.form-table input:focus {
+    border-color: #4a6cf7;
+    background: #fff;
+    box-shadow: 0 0 0 0.125rem rgba(74, 108, 247, 0.1);
+}
+
+/* 버튼 스타일 */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem; /* 버튼 간 간격 축소 */
+    margin-top: 1rem; /* 위쪽 여백 */
+}
+
+/* 버튼 영역 스타일 */
+.form-actions-center {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    gap: 1rem; /* 버튼 간 간격 */
+    margin-top: 1.5rem;
+}
+
+/* 회원 등록 폼 스타일 수정 */
+.member-form {
+    max-width: 100%; /* 화면의 100% 너비로 설정 */
+    margin: 0; /* 외부 여백 제거 */
+    padding: 1.5rem 2%; /* 내부 여백 축소 */
+    background: #fff;
+    border-radius: 0.5rem; /* 둥근 모서리 */
+    box-shadow: 0 0.125rem 0.5rem rgba(74, 108, 247, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* 요소 간 간격 */
+    box-sizing: border-box; /* 테두리 포함 크기 계산 */
+}
+
+/* 폼 내부 요소 스타일 */
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem; /* 요소 간 여백 축소 */
+}
+
+.form-row label {
+    margin-bottom: 0.5rem; /* 라벨과 입력 필드 간 여백 축소 */
+    color: #222b45;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.form-row input {
+    padding: 0.75rem 1rem; /* 입력 필드 내부 여백 축소 */
+    border: 1px solid #e0e7ff;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    background: #f5f8ff;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.form-row input:focus {
+    border-color: #4a6cf7;
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.1);
+}
+
+/* 버튼 스타일 */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem; /* 버튼 간 간격 축소 */
+    margin-top: 1rem; /* 위쪽 여백 */
+}
+
+/* 등록 버튼 스타일 */
+.action-bar {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    margin-bottom: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #4a6cf7, #6b7dfb);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 0.125rem 0.5rem rgba(74, 108, 247, 0.08);
+    transition: background 0.18s, box-shadow 0.18s;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background: #4a6cf7;
+    box-shadow: 0 0.25rem 1rem rgba(74, 108, 247, 0.13);
+}
+
+.btn-cancel {
+    background: #e9eef6;
+    color: #4a6cf7;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.18s, color 0.18s;
+}
+
+.btn-cancel:hover {
+    background: #d0d8e8;
+    color: #1a2233;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .admin-sidebar {
+        width: 20%; /* 화면이 좁아지면 사이드바 너비를 늘림 */
+    }
+
+    .admin-main {
+        padding: 1.5rem 3%; /* 모바일에서 여백 조정 */
+    }
+
+    .card {
+        padding: 1.25rem 1.5%; /* 카드 내부 여백 축소 */
+    }
+
+    .form-table th,
+    .form-table td {
+        padding: 0.6rem; /* 모바일에서 셀 내부 여백 축소 */
+    }
+
+    .member-form {
+        max-width: 95%; /* 화면이 좁아지면 너비를 늘림 */
+        padding: 1.25rem 1.5%; /* 내부 여백 축소 */
+    }
+
+    .form-row input {
+        padding: 0.5rem 0.75rem; /* 모바일에서 입력 필드 내부 여백 축소 */
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 25%; /* 모바일에서 사이드바 너비 조정 */
+    }
+
+    .admin-main {
+        padding: 1rem 5%;
+    }
+
+    .card {
+        padding: 1rem 1%; /* 모바일에서 카드 내부 여백 축소 */
+    }
+
+    .member-form {
+        max-width: 100%; /* 모바일에서 너비를 꽉 채움 */
+        padding: 1rem 1%; /* 내부 여백 축소 */
+    }
+}
+

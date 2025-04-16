@@ -29,7 +29,7 @@
     <div id="bar" class="bar"></div>
 </div>
 <div class="container">
-    <h1>하나떵개의 그림들 ✨ (원쏘!)</h1>
+    <h1>하나떵개의 그림들 ✨ (크로키)</h1>
     <!-- 햄버거 메뉴 버튼 -->
     <div class="hamburger" id="hamburger">☰</div>
 
@@ -42,15 +42,41 @@
     </nav>
 
     <div class="gallery">
-        <div class="item"><img src="/uploads/images/oneso/image1.jpg" alt="그림 1"/></div>
-        <div class="item"><img src="/uploads/images/oneso/image2.jpg" alt="그림 2"/></div>
-        <div class="item"><img src="/uploads/images/oneso/image3.jpg" alt="그림 3"/></div>
-        <div class="item"><img src="/uploads/images/oneso/image4.jpg" alt="그림 4"/></div>
-        <div class="item"><img src="/uploads/images/oneso/image6.jpg" alt="그림 6"/></div>
-        <div class="item"><img src="/uploads/images/oneso/image7.jpg" alt="그림 7"/></div>
-        <div class="item"><img src="/uploads/images/oneso/image8.jpg" alt="그림 8"/></div>
-        <div class="item"><img src="/uploads/images/oneso/image5.jpg" alt="그림 5"/></div>
-        <div class="item"><img src="/uploads/images/oneso/image9.jpg" alt="그림 9"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image1.jpg" alt="그림 1"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image2.jpg" alt="그림 2"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image3.jpg" alt="그림 3"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image4.jpg" alt="그림 4"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image5.jpg" alt="그림 5"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image6.jpg" alt="그림 6"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image7.jpg" alt="그림 7"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image8.jpg" alt="그림 8"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image9.jpg" alt="그림 9"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image10.jpg" alt="그림 10"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image11.jpg" alt="그림 11"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image12.jpg" alt="그림 12"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image13.jpg" alt="그림 13"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image14.jpg" alt="그림 14"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image15.jpg" alt="그림 15"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image16.jpg" alt="그림 16"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image17.jpg" alt="그림 17"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image18.jpg" alt="그림 18"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image19.jpg" alt="그림 19"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image20.jpg" alt="그림 20"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image21.jpg" alt="그림 21"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image22.jpg" alt="그림 22"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image23.jpg" alt="그림 23"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image24.jpg" alt="그림 24"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image25.jpg" alt="그림 25"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image26.jpg" alt="그림 26"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image27.jpg" alt="그림 27"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image28.jpg" alt="그림 28"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image29.jpg" alt="그림 29"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image30.jpg" alt="그림 30"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image31.jpg" alt="그림 31"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image32.jpg" alt="그림 32"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image33.jpg" alt="그림 33"/></div>
+        <div class="item"><img src="/uploads/images/sketches/image34.jpg" alt="그림 34"/></div>
+
     </div>
 </div>
 
@@ -146,7 +172,7 @@
 
     // --- 하트/파티클/벚꽃잎 생성 함수들 (원본 유지) ---
     function createHeartsFromBox(x, y, width, height) { /* ... 원본 코드와 동일 ... */
-        fetch("images/heart-svgrepo-com.svg?cache=" + Date.now())
+        fetch("/static/images/heart-svgrepo-com.svg?cache=" + Date.now())
             .then(res => { if (!res.ok) throw new Error('Network response was not ok'); return res.text(); })
             .then(svgText => {
                 let cleanedSvg = svgText.replace(/<svg([^>]*)width="[^"]*"([^>]*)>/, '<svg$1$2>').replace(/<svg([^>]*)height="[^"]*"([^>]*)>/, '<svg$1$2>').replace(/fill="none"/g, 'fill="#ff6b81"').replace(/stroke="#[^"]*"/g, 'stroke="none"');

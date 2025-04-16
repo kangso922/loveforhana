@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>갤러리 관리자</title>
+    <link rel="stylesheet" href="/AD0618/static/css/test.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+<header class="admin-header">
+    <div class="admin-left">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <h1 class="admin-title">갤러리 관리</h1>
+    </div>
+    <button class="logout-btn">로그아웃</button>
+</header>
+
+<div class="admin-container">
+    <nav class="admin-sidebar" id="sidebar">
+        <ul>
+            <li><a href="#" class="sidebar-link active">갤러리 관리</a></li>
+            <li><a href="#" class="sidebar-link">음악 관리</a></li>
+        </ul>
+    </nav>
+
+    <main class="admin-main with-padding">
+        <div class="admin-content">
+            <section class="view-toggle">
+                <select id="categorySelect">
+                    <option value="all">전체</option>
+                    <option value="landscape">풍경</option>
+                    <option value="animal">동물</option>
+                    <option value="person">인물</option>
+                    <option value="etc">기타</option>
+                </select>
+                <button class="toggle-btn" id="thumbView">썸네일 보기</button>
+                <button class="toggle-btn" id="listView">리스트 보기</button>
+            </section>
+
+            <section class="upload-area" id="uploadArea">
+                <p>이미지를 드래그하거나 클릭하여 업로드</p>
+                <input type="file" id="fileInput" multiple accept="image/*" />
+            </section>
+
+            <section class="gallery-grid" id="gallery">
+                <div class="gallery-card" data-category="landscape">
+                    <img src="/images/sample.jpg" alt="업로드된 이미지" />
+                    <p class="gallery-title">샘플 풍경</p>
+                    <button class="delete-btn">삭제</button>
+                </div>
+                <div class="gallery-card" data-category="animal">
+                    <img src="/images/sample2.jpg" alt="업로드된 이미지" />
+                    <p class="gallery-title">샘플 동물</p>
+                    <button class="delete-btn">삭제</button>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<footer class="admin-footer">
+    <div class="footer-inner">
+        ⓒ 2025 하나떵개 Admin
+    </div>
+</footer>
+
+<script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const main = document.querySelector('.admin-main');
+
+    menuToggle.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            sidebar.classList.toggle('active');
+        } else {
+            sidebar.classList.toggle('collapsed');
+            main.classList.toggle('collapsed');
+        }
+    });
+
+
+/*    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 768) {
+            main.style.marginLeft = '0';
+        } else if (!sidebar.classList.contains('collapsed')) {
+            main.style.marginLeft = '220px';
+        }
+    });*/
+
+    const gallery = document.getElementById('gallery');
+    document.getElementById('thumbView').addEventListener('click', () => {
+        gallery.classList.remove('list-view');
+    });
+    document.getElementById('listView').addEventListener('click', () => {
+        gallery.classList.add('list-view');
+    });
+
+    document.getElementById('categorySelect').addEventListener('change', (e) => {
+        const filter = e.target.value;
+        document.querySelectorAll('.gallery-card').forEach(card => {
+            card.style.display = filter === 'all' || card.getAttribute('data-category') === filter ? 'block' : 'none';
+        });
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => btn.parentElement.remove());
+    });
+
+    const fileInput = document.getElementById('fileInput');
+    const uploadArea = document.getElementById('uploadArea');
+
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#1a73e8';
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = '#ccc';
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        handleFiles(e.dataTransfer.files);
+        uploadArea.style.borderColor = '#ccc';
+    });
+    fileInput.addEventListener('change', () => {
+        handleFiles(fileInput.files);
+    });
+
+    function handleFiles(files) {
+        Array.from(files).forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const div = document.createElement('div');
+                div.className = 'gallery-card';
+                div.setAttribute('data-category', 'etc');
+                div.innerHTML = `
+            <img src="${e.target.result}" alt="업로드된 이미지" />
+            <p class="gallery-title">${file.name}</p>
+            <button class="delete-btn">삭제</button>
+          `;
+                div.querySelector('.delete-btn').addEventListener('click', () => div.remove());
+                gallery.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+</script>
+</body>
+</html>

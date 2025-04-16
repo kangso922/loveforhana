@@ -1,0 +1,228 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Pretendard', sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+}
+body {
+    overflow-x: hidden;
+}
+/* ===== 헤더 ===== */
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1a73e8;
+    color: white;
+    padding: 1rem 2rem;
+    height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.admin-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.menu-toggle {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+.logout-btn {
+    background-color: white;
+    color: #1a73e8;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* ===== 레이아웃 ===== */
+.admin-container {
+    display: flex;
+    padding-top: 60px;
+    min-height: calc(100vh - 60px);
+}
+
+/* ===== 사이드바 ===== */
+.admin-sidebar {
+    width: 220px;
+    background-color: #f0f0f0;
+    padding: 2rem 1rem 1rem;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.06);
+}
+.admin-main.with-padding {
+    padding: 5rem 4rem 5rem; /* 상 80px, 좌우 64px, 하 80px */
+    box-sizing: border-box;
+}
+
+.admin-sidebar.collapsed {
+    transform: translateX(-100%);
+}
+.admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.5rem;
+}
+.sidebar-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 0.375rem;
+}
+.sidebar-link.active {
+    font-weight: 700;
+    color: #1a73e8;
+}
+
+/* ===== 메인 영역 ===== */
+.admin-main {
+    margin-left: 220px;
+    flex: 1;
+    transition: margin-left 0.3s ease;
+    padding: 2rem 2.5rem 4rem;
+    box-sizing: border-box;
+}
+.admin-main.collapsed {
+    margin-left: 60px;
+}
+
+/* ===== 콘텐츠 영역 ===== */
+.admin-content {
+    max-width: 100%;
+}
+
+/* ===== 보기 전환 ===== */
+.view-toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.toggle-btn {
+    padding: 0.5rem 1rem;
+    background: #1a73e8;
+    color: #fff;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* ===== 업로드 영역 ===== */
+.upload-area {
+    border: 2px dashed #ccc;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== 갤러리 (썸네일) ===== */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+.gallery-card {
+    background: #fff;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    padding: 1rem;
+    text-align: center;
+}
+.gallery-card img {
+    max-width: 100%;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.gallery-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+.delete-btn {
+    background: #e53935;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+/* ===== 갤러리 (리스트 보기) ===== */
+.gallery-grid.list-view {
+    display: block;
+}
+.gallery-grid.list-view .gallery-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+.gallery-grid.list-view img {
+    width: 60px;
+    height: auto;
+    margin-right: 1rem;
+    border-radius: 0.5rem;
+}
+.gallery-grid.list-view .gallery-title {
+    flex: 1;
+    text-align: left;
+}
+
+/* ===== 푸터 ===== */
+.admin-footer {
+    background-color: #ffffff;
+    font-size: 0.9rem;
+    color: #999;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.5rem 2.5rem;
+}
+
+.footer-inner {
+    max-width: 100%;
+}
+
+/* ===== 반응형 대응 ===== */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+    .admin-sidebar.active {
+        transform: translateX(0);
+    }
+    .admin-main {
+        margin-left: 0 !important;
+        padding: 3rem !important;
+    }
+
+}

@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    background: #f8f9fc;
+    color: #333;
+}
+
+/* 로그인 페이지 레이아웃 */
+.login-wrapper {
+    display: flex;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.login-visual {
+    flex: 1;
+    background: #f4f6f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.login-visual img {
+    max-width: 90%;
+    height: auto;
+}
+
+.login-panel {
+    flex: 1;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3rem;
+    box-shadow: -1px 0 8px rgba(0,0,0,0.05);
+}
+
+.login-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.login-sub {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    padding: 0.9rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+    background: #fafafa;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4a6cf7;
+    background: #fff;
+}
+
+.login-button {
+    padding: 0.9rem;
+    background: linear-gradient(to right, #4a6cf7, #6b7dfb);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-button:hover {
+    box-shadow: 0 6px 12px rgba(74, 108, 247, 0.3);
+    transform: translateY(-1px);
+}
+
+.login-error {
+    color: #e53935;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.login-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+/* 반응형 - 로그인 페이지 관련 부분만 남김 */
+@media (max-width: 768px) {
+    /* .admin-nav ul, .user-table 등 로그인 페이지와 관련 없는 반응형 규칙 제거됨 */
+
+    .login-wrapper {
+        flex-direction: column;
+    }
+
+    .login-visual {
+        display: none; /* 반응형에서는 비주얼 영역 숨김 */
+    }
+
+    .login-panel {
+        padding: 2.5rem 1.5rem;
+        box-shadow: none;
+    }
+
+    .login-title {
+        font-size: 1.6rem;
+    }
+}
+

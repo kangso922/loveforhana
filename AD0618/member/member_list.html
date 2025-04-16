@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원 관리</title>
+    <link rel="stylesheet" href="/AD0618/static/css/member.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- 상단바 -->
+<header class="admin-topbar">
+    <div class="admin-topbar-title">하나떵개 관리자 시스템</div>
+    <div class="admin-topbar-nav">
+        <a href="member_list.html" class="active">회원 목록</a>
+        <a href="../login.html">로그아웃</a>
+    </div>
+</header>
+
+<!-- 본문 전체 구조 -->
+<div class="admin-layout">
+    <!-- 사이드바 -->
+    <aside class="admin-sidebar">
+        <nav>
+            <ul>
+                <li><a href="member_list.html" class="active">회원 목록</a></li>
+                <li><a href="../login.html">로그아웃</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="admin-main">
+        <div class="page-header">
+            <h1>회원 관리</h1>
+            <p class="page-subtitle">현재 등록된 회원 목록입니다.</p>
+        </div>
+
+        <section class="card">
+            <table class="user-table">
+                <thead>
+                <tr>
+                    <th>회원 ID</th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>가입일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>user001</td>
+                    <td>홍길동</td>
+                    <td>hong@example.com</td>
+                    <td>2024-12-01</td>
+                </tr>
+                <tr>
+                    <td>user002</td>
+                    <td>김떵개</td>
+                    <td>kk@example.com</td>
+                    <td>2025-01-15</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<footer class="admin-footer">
+    ⓒ 2025 하나떵개 Admin
+</footer>
+
+</body>
+</html>

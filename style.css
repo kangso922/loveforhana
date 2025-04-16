@@ -30,7 +30,9 @@ h1 {
 
 .item img {
     width: 100%;
-    height: auto;
+    aspect-ratio: 1 / 1; /* 정사각형 비율 유지 */
+    object-fit: cover;   /* 이미지 채우기 */
+    object-position: center; /* 중앙 기준으로 자르기 */
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -188,4 +190,82 @@ button:hover {
 
 #playPauseBtn:hover {
     background: #ffcdd8;
+}
+
+/* 햄버거 버튼 */
+.hamburger {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1001;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #e66588;
+    background: #fff0f5;
+    border-radius: 8px;
+    padding: 0.3rem 0.6rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* 사이드 메뉴 */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -220px;
+    width: 200px;
+    height: 100%;
+    background-color: #fff0f5;
+    box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+    z-index: 1000;
+    padding-top: 5rem;
+    transition: right 0.3s ease;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.sidebar ul li {
+    padding: 1rem;
+    border-bottom: 1px solid #ffcddd;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #e66588;
+    font-family: 'Gamja Flower', cursive;
+    font-size: 1.4rem;
+}
+
+/* 사이드 메뉴 열릴 때 */
+.sidebar.active {
+    right: 0;
+}
+
+/* 데스크톱에서 더 넓고 시각적으로 크게 보이도록 */
+@media (min-width: 768px) {
+    .sidebar {
+        width: 300px;
+        right: -300px;
+        padding-top: 6rem;
+    }
+
+    .sidebar ul li {
+        padding: 1.5rem 2rem;
+    }
+
+    .sidebar ul li a {
+        font-size: 1.5rem;
+    }
+
+}
+
+
+/* 반응형 */
+@media (max-width: 600px) {
+    .gallery { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .player { width: 120px; }
 }
