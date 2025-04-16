@@ -327,16 +327,16 @@ button:hover {
     }
 
     .modal-review {
-        font-size: 1rem;
+        font-size: 1.1rem;
         padding: 0.6rem 0.9rem;
         bottom: 4px;
         border-radius: 10px;
     }
 
     .modal-review .review-close {
-        top: 4px;
+        top: 1px;
         right: 6px;
-        font-size: 1rem;
+        font-size: 2.5rem;
     }
     .modal-review .review-text {
         display: block;
@@ -344,4 +344,10 @@ button:hover {
         padding-left: 0 !important;  /* 왼쪽 패딩 제거 */
         text-align: center;
     }
+    .modal-review .review-text {
+         display: block;
+         margin: 0 auto;           /* 가운데 정렬 */
+         padding-left: 0 !important;  /* 왼쪽 패딩 제거 */
+         text-align: center;
+     }
 }
