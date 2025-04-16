@@ -64,7 +64,6 @@ button:hover {
     background-color: #ffd6e8;
 }
 
-/* 모달 */
 .modal {
     display: none;
     position: fixed;
@@ -78,12 +77,64 @@ button:hover {
     justify-content: center;
     align-items: center;
 }
+.modal-inner {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    margin: 0 auto;
+    display: block;
+    align-items: center;
+    gap: 0; /* 줄 간격 제거 */
+}
 
 .modal-content {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 0; /* 하단 공백 제거 */
 }
+
+
+/* 댓글창은 이미지 너비에 딱 맞추고, 이미지 기준 내부에 위치 */
+.modal-review {
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.82);
+    border-radius: 12px;
+    padding: 0.8rem;
+    font-size: 1.3rem;
+    font-family: 'Gamja Flower', cursive;
+    color: #222;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    line-height: 1.6;
+    display: none;
+    z-index: 5;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* 닫기 버튼 */
+.modal-review .review-close {
+    position: absolute;
+    top: 1px;
+    right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 2.3rem;
+    color: #999;
+}
+.modal-review .review-close:hover {
+    color: #e74c3c;
+}
+
+
 
 .close {
     position: absolute;
@@ -268,4 +319,22 @@ button:hover {
 @media (max-width: 600px) {
     .gallery { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .player { width: 120px; }
+
+    .modal-inner {
+        max-width: 95vw;
+        padding-bottom: 48px;
+    }
+
+    .modal-review {
+        font-size: 1rem;
+        padding: 0.6rem 0.9rem;
+        bottom: 4px;
+        border-radius: 10px;
+    }
+
+    .modal-review .review-close {
+        top: 4px;
+        right: 6px;
+        font-size: 1rem;
+    }
 }

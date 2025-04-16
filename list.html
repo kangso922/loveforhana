@@ -81,10 +81,15 @@
 </div>
 
 <!-- 모달 -->
-<div class="modal" id="modal">
-    <span class="close" id="close">×</span>
-    <img class="modal-content" id="modal-img"/>
+<div class="modal-inner">
+    <img id="modal-img" class="modal-content" />
+    <div class="modal-review" id="modal-review">
+        <span id="review-text">"..."</span>
+        <span class="review-close" id="review-close">×</span>
+    </div>
 </div>
+
+
 
 <audio id="bgm" loop>
     <source src="./uploads/music/bgm.mp3" type="audio/mpeg"/>
@@ -114,7 +119,57 @@
     if (!modalImg) console.error("CRITICAL: Img #modal-img not found!");
     if (!closeBtn) console.error("CRITICAL: Span #close not found!");
 
+    const reviews = {
+        "oneso/image1.jpg": "“그림을 통한 위로... 꽤 진하게 스며드는걸...”",
+        "oneso/image2.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "oneso/image3.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "oneso/image4.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "oneso/image5.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "oneso/image6.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "oneso/image7.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "oneso/image8.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "oneso/image9.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
 
+        "sketches/image1.jpg": "“그림을 통한 위로... 꽤 진하게 스며드는걸...”",
+        "sketches/image2.jpg": "“뽈뽈 햄스터 바보 하나”",
+        "sketches/image3.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/image4.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/image5.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/image6.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/image7.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/image8.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/image9.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag10.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag11.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag12.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag13.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag14.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag15.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag16.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag17.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag18.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag19.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag20.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag21.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag22.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag23.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag24.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag25.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag26.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag27.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag28.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag29.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag30.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag31.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag32.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag33.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        "sketches/imag34.jpg": "“나에게 이런 선물을 주다니... 감동이야.”",
+        // 계속 추가 가능
+    };
+
+    document.getElementById('review-close')?.addEventListener('click', () => {
+        document.getElementById('modal-review').style.display = 'none';
+    });
 
     hamburger.addEventListener('click', () => {
         sidebar.classList.toggle('active');
@@ -139,6 +194,18 @@
             };
 
             modalImg.src = img.src; // src 설정
+            const pathSegments = img.src.split('/');
+            const folderAndFile = pathSegments.slice(-2).join('/');  // 예: "sketches/image2.jpg"
+            const reviewText = reviews[folderAndFile];
+
+            const reviewBox = document.getElementById('modal-review');
+            const reviewContent = document.getElementById('review-text');
+            if (reviewText) {
+                reviewContent.textContent = reviewText;
+                reviewBox.style.display = 'block';
+            } else {
+                reviewBox.style.display = 'none';
+            }
             scrollY = window.scrollY; // 스크롤 위치 저장
 
             // body 고정
@@ -172,7 +239,7 @@
 
     // --- 하트/파티클/벚꽃잎 생성 함수들 (원본 유지) ---
     function createHeartsFromBox(x, y, width, height) { /* ... 원본 코드와 동일 ... */
-        fetch("/static/images/heart-svgrepo-com.svg?cache=" + Date.now())
+        fetch("./static/images/heart-svgrepo-com.svg?cache=" + Date.now())
             .then(res => { if (!res.ok) throw new Error('Network response was not ok'); return res.text(); })
             .then(svgText => {
                 let cleanedSvg = svgText.replace(/<svg([^>]*)width="[^"]*"([^>]*)>/, '<svg$1$2>').replace(/<svg([^>]*)height="[^"]*"([^>]*)>/, '<svg$1$2>').replace(/fill="none"/g, 'fill="#ff6b81"').replace(/stroke="#[^"]*"/g, 'stroke="none"');
@@ -365,6 +432,18 @@
                 };
 
                 modalImg.src = img.src;
+                const pathSegments = img.src.split('/');
+                const folderAndFile = pathSegments.slice(-2).join('/');  // 예: "sketches/image2.jpg"
+                const reviewText = reviews[folderAndFile];
+
+                const reviewBox = document.getElementById('modal-review');
+                const reviewContent = document.getElementById('review-text');
+                if (reviewText) {
+                    reviewContent.textContent = reviewText;
+                    reviewBox.style.display = 'block';
+                } else {
+                    reviewBox.style.display = 'none';
+                }
                 scrollY = window.scrollY;
                 document.body.style.position = 'fixed';
                 document.body.style.top = `-${scrollY}px`;
