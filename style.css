@@ -107,13 +107,12 @@ button:hover {
     box-sizing: border-box;
     background-color: rgba(255, 255, 255, 0.85);
     border-radius: 12px;
-    padding: 0.8rem 1rem;
-    font-size: 1.3rem;
+    padding: 0.8rem;
+    font-size: 1.8rem;
     font-family: 'Gamja Flower', cursive;
     color: #222;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     line-height: 1.6;
-    text-align: center;
     display: none;
     z-index: 5;
     white-space: pre-wrap;
@@ -126,6 +125,7 @@ button:hover {
     top: 1px;
     right: 10px;
     cursor: pointer;
+    white-space: normal;
     font-weight: bold;
     font-size: 2rem;
     color: #999;
@@ -337,5 +337,11 @@ button:hover {
         top: 4px;
         right: 6px;
         font-size: 1rem;
+    }
+    .modal-review .review-text {
+        display: block;
+        margin: 0 auto;           /* 가운데 정렬 */
+        padding-left: 0 !important;  /* 왼쪽 패딩 제거 */
+        text-align: center;
     }
 }
