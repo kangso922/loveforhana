@@ -82,38 +82,37 @@ button:hover {
     max-width: 90vw;
     max-height: 90vh;
     margin: 0 auto;
-    display: block;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0; /* 줄 간격 제거 */
+    overflow-y: auto; /* 스크롤 가능하게 */
+    padding-bottom: 1rem; /* 약간의 바닥 여백 */
 }
 
 .modal-content {
     width: 100%;
     height: auto;
-    max-height: 90vh;
+    max-height: 70vh; /* 댓글창 포함 여유 */
     object-fit: contain;
     border-radius: 8px;
     display: block;
-    margin-bottom: 0; /* 하단 공백 제거 */
 }
 
-
-/* 댓글창은 이미지 너비에 딱 맞추고, 이미지 기준 내부에 위치 */
+/* 댓글창은 이미지 아래에 자연스럽게 위치 */
 .modal-review {
-    position: absolute;
-    bottom: 1px;
-    left: 0;
+    margin-top: 0.5rem;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    background-color: rgba(255, 255, 255, 0.82);
+    background-color: rgba(255, 255, 255, 0.85);
     border-radius: 12px;
-    padding: 0.8rem;
+    padding: 0.8rem 1rem;
     font-size: 1.3rem;
     font-family: 'Gamja Flower', cursive;
     color: #222;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     line-height: 1.6;
+    text-align: center;
     display: none;
     z-index: 5;
     white-space: pre-wrap;
@@ -123,16 +122,17 @@ button:hover {
 /* 닫기 버튼 */
 .modal-review .review-close {
     position: absolute;
-    top: 1px;
+    top: 6px;
     right: 10px;
     cursor: pointer;
     font-weight: bold;
-    font-size: 2.3rem;
+    font-size: 1.5rem;
     color: #999;
 }
 .modal-review .review-close:hover {
     color: #e74c3c;
 }
+
 
 
 
