@@ -100,6 +100,7 @@ button:hover {
 
 /* 댓글창은 이미지 아래에 자연스럽게 위치 */
 .modal-review {
+    position: relative;
     margin-top: 0.5rem;
     width: 100%;
     max-width: 100%;
@@ -122,11 +123,11 @@ button:hover {
 /* 닫기 버튼 */
 .modal-review .review-close {
     position: absolute;
-    top: 6px;
+    top: 1px;
     right: 10px;
     cursor: pointer;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: #999;
 }
 .modal-review .review-close:hover {
